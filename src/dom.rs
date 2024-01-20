@@ -1,29 +1,33 @@
+//! Basic DOM data structures.
+
 use std::collections::HashMap;
 
 
-type AtttrMap = HashMap<String, String>;
-
-struct Node {
+pub type AtttrMap = HashMap<String, String>;
+#[derive(Debug)]
+pub struct Node {
     children: Vec<Node>,
     node_type: NodeType
 }
 
-enum NodeType {
+#[derive(Debug)]
+pub enum NodeType {
     Text(String),
     Element(ElementData),
 }
-
-struct ElementData {
+#[derive(Debug)]
+pub struct ElementData {
     tag_name: String,
     attributes: AtttrMap,
 }
 
+// Constructor functions for convenience:
 
-fn text(data: String) -> Node {
+pub fn text(data: String) -> Node {
     Node { children: Vec::new(), node_type: NodeType::Text(data) }
 }
 
-fn element(name: String, attrs: AtttrMap, children: Vec<Node>) -> Node {
+pub fn element(name: String, attrs: AtttrMap, children: Vec<Node>) -> Node {
     Node {
         children: children,
         node_type: NodeType::Element(ElementData {
