@@ -73,6 +73,25 @@ struct Parser {
 }
 
 impl Parser {
+    fn parse_value(&mut self) -> Value {
+        match self.next_char() {
+            '0'..='9' => self.parse_length(),
+            '#' => self.parse_color(),
+            _ => Value::Keyword(self.parse_identifier())
+        }
+    }
+
+    fn parse_length(&mut self) -> Value {
+        Value::Length(self.parse_float(), self.parse_unit())
+    }
+    
+    fn parse_float(&mut self) -> f32 {
+        let s = self.consume_while(|c| match c {
+            '0'..='9' | '.' => true,
+            _ => false
+        });
+        s.parse().unwrap()
+    }
     fn parse_unit(&mut self) -> Unit {
         match &*self.parse_identifier().to_ascii_lowercase() {
             "px" => Unit::Px,
